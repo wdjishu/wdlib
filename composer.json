@@ -1,0 +1,22 @@
+{
+    "name": "wdjishu/wdlib",
+    "type": "library",
+    "description": "wd common lib",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "authors": [
+        {
+            "name": "Ruirong Lin",
+            "email": "linruirong@itogame.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "WDLib\\": "src/",
+        }
+    }
+}
