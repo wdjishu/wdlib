@@ -2,7 +2,7 @@
 
 namespace WDLib\ZK\Handlers;
 
-class ServiceHandler
+class ServiceUrlHandler
 {
 	private $file;
 	

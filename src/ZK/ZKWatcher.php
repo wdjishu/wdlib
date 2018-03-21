@@ -4,33 +4,41 @@ namespace WDLib\ZK;
 
 class ZKWatcher
 {
-	private $prefix;
+	private $platform;
 	private $zkConf;
 	private $myNodes;
 	private $second;
 
-	public function __construct( $prefix, $zkConf, $myNodes, $second=5 )
+    private static $nodes = [
+        'NODE_ENV_UNION_BASE' => '/env/union.base',
+        'NODE_SERVICE_URLS'   => '/service/urls',
+    ];
+    private static $handlers = [
+        'NODE_ENV_UNION_BASE' => __NAMESPACE__.'\\Handlers\\EnvHandler',
+        'NODE_SERVICE_URLS'   => __NAMESPACE__.'\\Handlers\\ServiceUrlHandler',
+    ];
+
+	public function __construct($platform, $zkConf, $myNodes, $second=5 )
 	{
-		$this->prefix  = '/'.trim($prefix, '/');
-		$this->zkConf  = $zkConf;
-		$this->myNodes = $myNodes;
-		$this->second  = $second ? $second : 5;
+		$this->platform = '/'.trim( $platform, '/');
+		$this->zkConf   = $zkConf;
+		$this->myNodes  = $myNodes;
+		$this->second   = $second;
 	}
 
     public function run()
     {
-    	$nodes = include('ZKNodeConf.php');
     	foreach( $this->myNodes as $key => $file ){
-    		if( !isset($nodes[$key]) ){
+    		if( !isset($this->nodes[$key]) || !isset($this->handlers[$key]) ){
     			continue;
     		}
-    		$node   = $this->prefix.$key;
-    		$class  = __NAMESPACE__.'\\Handlers\\'.$nodes[$key];
+    		$node   = $this->platform.$this->nodes[$key];
+    		$class  = $this->handlers[$key];
     		$objCb  = new $class( $file );
     		$objSub = new ZKSubscribe( $this->zkConf );
     		$objSub->run( $node, [ $objCb, 'handler'] );
     	}
-    	while( true ){
+    	while( $this->second > 0 ){
     		sleep( $this->second );
     	}
     }

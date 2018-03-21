@@ -24,8 +24,15 @@ class MSHttp extends HttpClient
 		}
 		$response = $this->request( $method, $url, $data );
 		$code     = $response->getStatusCode();
+		if( '200' != $code ){
+			throw new \Exception("http status={$code} : {$url}", $code);
+		}
 		$retJson  = $response->getBody();
-		return $retJson;
+		$ret = $retJson ? json_decode($retJson, TRUE) : [];
+		if( empty($ret['errno']) || 1 != $ret['errno'] ){
+			throw new \Exception($ret['msg'], $ret['errno']);
+		}
+		return $ret['data'];
 	}
 
 	private function makeUrl( $key, &$params )
