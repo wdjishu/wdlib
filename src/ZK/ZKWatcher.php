@@ -20,9 +20,6 @@ class ZKWatcher
 
 	public function __construct($platform, $zkConf, $myNodes, $second=5 )
 	{
-        if( empty($platform) || empty($zkConf) || empty($myNodes) ){
-            return FALSE;
-        }
 		$this->platform = '/'.trim( $platform, '/');
 		$this->zkConf   = $zkConf;
 		$this->myNodes  = $myNodes;
@@ -31,6 +28,9 @@ class ZKWatcher
 
     public function run()
     {
+        if( '/'==$this->platform || empty($this->zkConf) || empty($this->myNodes) ){
+            return FALSE;
+        }
     	foreach( $this->myNodes as $key => $file ){
     		if( !isset($this->nodes[$key]) || !isset($this->handlers[$key]) ){
     			continue;
