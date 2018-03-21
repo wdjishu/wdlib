@@ -9,11 +9,11 @@ class ZKWatcher
 	private $myNodes;
 	private $second;
 
-    private static $nodes = [
+    private $nodes = [
         'NODE_ENV_UNION_BASE' => '/env/union.base',
         'NODE_SERVICE_URLS'   => '/service/urls',
     ];
-    private static $handlers = [
+    private $handlers = [
         'NODE_ENV_UNION_BASE' => __NAMESPACE__.'\\Handlers\\EnvHandler',
         'NODE_SERVICE_URLS'   => __NAMESPACE__.'\\Handlers\\ServiceUrlHandler',
     ];

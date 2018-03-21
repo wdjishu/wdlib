@@ -11,12 +11,18 @@ class EnvHandler
 		$this->file = $file;
 	}
 
-    function handler( $str )
+    function handler( $json )
     {
-        if( !$str ){
+        $arr = $json ? json_decode( $json, TRUE ) : [];
+        if( !$arr ){
         	\Log::error( __METHOD__." env config can not be cleanup" );
         	return;
         }
+        $str = '';
+        foreach ($arr as $k => $v) {
+            $str.="{$k}={$v}\n";
+        }
         file_put_contents($this->file, $str);
+        unset($json, $arr, $str);
     }
 }
