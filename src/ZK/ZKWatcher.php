@@ -20,6 +20,9 @@ class ZKWatcher
 
 	public function __construct($platform, $zkConf, $myNodes, $second=5 )
 	{
+        if( empty($platform) || empty($zkConf) || empty($myNodes) ){
+            return FALSE;
+        }
 		$this->platform = '/'.trim( $platform, '/');
 		$this->zkConf   = $zkConf;
 		$this->myNodes  = $myNodes;
